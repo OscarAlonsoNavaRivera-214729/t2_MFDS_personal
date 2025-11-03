@@ -109,4 +109,5 @@ staticfiles/
 # Optional: docker compose override
 docker-compose.override.yml
 
+GEMINI.md
 # End of file
