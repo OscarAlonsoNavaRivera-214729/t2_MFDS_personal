@@ -11,6 +11,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
 from app.models.base import BaseModel
+from app.models.listing import Listing  
 
 class ListingTypeEnum(str, enum.Enum):
     """
@@ -89,12 +90,10 @@ class Category(BaseModel):
         cascade="all, delete-orphan",
         foreign_keys=[parent_category_id]
     )
-
-    # Relación con Listings (se implementará después)
-    # listings: Mapped[List["Listing"]] = relationship(
-    #     "Listing",
-    #     back_populates="category"
-    # )
+    listings: Mapped[List["Listing"]] = relationship(
+        "Listing",
+        back_populates="category"
+    )
 
     # INDICES COMPUESTOS
     __table_args__ = (

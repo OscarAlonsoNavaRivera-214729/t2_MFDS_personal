@@ -109,5 +109,7 @@ staticfiles/
 # Optional: docker compose override
 docker-compose.override.yml
 
+# AI files
 GEMINI.md
+CLAUDE.md
 # End of file
