@@ -4,13 +4,18 @@ Modelo de base de datos para Reviews.
 Implementa la tabla 'reviews'
 """
 
-from typing import Optional 
+from typing import Optional, TYPE_CHECKING
 from datetime import datetime
 
 from sqlalchemy import func, String, Integer, ForeignKey, DateTime, Text, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import BaseModel
+
+if TYPE_CHECKING:
+    from app.models.order_item import OrderItem
+    from app.models.user import User
+    from app.models.listing import Listing
 
 
 class Review(BaseModel):

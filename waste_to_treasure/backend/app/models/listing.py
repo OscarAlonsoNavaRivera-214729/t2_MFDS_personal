@@ -4,7 +4,7 @@ Modelo de base de datos para Listing.
 Implementa la tabla 'listings'
 Almacena publicaciones de materiales (B2B) y productos (B2C).
 """
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from decimal import Decimal
 
 from sqlalchemy import String, Integer, Text, Numeric, ForeignKey, Enum as SQLEnum, Index
@@ -12,10 +12,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
 from app.models.base import BaseModel
-from app.models.category import ListingTypeEnum, Category  
-from app.models.user import User  
-from app.models.order_item import OrderItem  
-from app.models.listing_image import ListingImage
+from app.models.category import ListingTypeEnum
+
+if TYPE_CHECKING:
+    from app.models.category import Category
+    from app.models.user import User
+    from app.models.order_item import OrderItem
+    from app.models.listing_image import ListingImage
+    from app.models.reviews import Review
 
 
 class ListingStatusEnum(str, enum.Enum):
@@ -135,12 +139,13 @@ class Listing(BaseModel):
     )
 
     # FOREIGN KEYS ADICIONALES
-    location_address_id: Mapped[Optional[int]] = mapped_column(
-        Integer,
-        ForeignKey("addresses.address_id", ondelete="SET NULL"),
-        nullable=True,
-        comment="ID de la dirección donde se encuentra el ítem físicamente"
-    )
+    # TODO: Descomentar cuando el modelo Address sea implementado
+    # location_address_id: Mapped[Optional[int]] = mapped_column(
+    #     Integer,
+    #     ForeignKey("addresses.address_id", ondelete="SET NULL"),
+    #     nullable=True,
+    #     comment="ID de la dirección donde se encuentra el ítem físicamente"
+    # )
     
     origin_description: Mapped[Optional[str]] = mapped_column(
         Text,
@@ -191,6 +196,10 @@ class Listing(BaseModel):
     )
     order_items: Mapped[List["OrderItem"]] = relationship(
         "OrderItem",
+        back_populates="listing"
+    )
+    reviews: Mapped[List["Review"]] = relationship(
+        "Review",
         back_populates="listing"
     )
 
