@@ -6,10 +6,12 @@ Almacena la información de los usuarios de la plataforma.
 """
 from typing import Optional
 from sqlalchemy import String, Integer, Enum as SQLEnum
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import Optional, List
 import enum
 
 from app.models.base import BaseModel
+from app.models.listing import Listing  
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -72,6 +74,14 @@ class User(BaseModel):
         nullable=False,
         default=UserStatusEnum.PENDING,
         comment="Estado actual del usuario"
+    )
+
+    # RELACIONES
+    listings: Mapped[List["Listing"]] = relationship(
+        "Listing",
+        foreign_keys="Listing.seller_id",
+        back_populates="seller",
+        cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

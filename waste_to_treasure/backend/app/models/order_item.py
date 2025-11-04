@@ -6,9 +6,11 @@ Representa un ítem dentro de una orden de compra.
 """
 from decimal import Decimal
 from sqlalchemy import Integer, Numeric, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import Optional
 
 from app.models.base import BaseModel
+from app.models.listing import Listing 
 
 class OrderItem(BaseModel):
     """
@@ -53,6 +55,12 @@ class OrderItem(BaseModel):
         Numeric(10, 2),
         nullable=False,
         comment="Precio unitario del ítem en el momento de la compra (precisión de 2 decimales)"
+    )
+
+    #RELACIONES
+    listing: Mapped[Optional["Listing"]] = relationship(
+        "Listing",
+        back_populates="order_items"
     )
 
     def __repr__(self) -> str:
