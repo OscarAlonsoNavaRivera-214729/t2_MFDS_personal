@@ -1,17 +1,20 @@
 """
-Modelo "stub" de base de datos para User.
+Modelo de base de datos para User.
 
 Implementa la tabla 'users'
 Almacena la información de los usuarios de la plataforma.
 """
-from typing import Optional
+from typing import Optional, List, TYPE_CHECKING
 from sqlalchemy import String, Integer, Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import Optional, List
 import enum
 
 from app.models.base import BaseModel
-from app.models.listing import Listing  
+
+if TYPE_CHECKING:
+    from app.models.listing import Listing
+    from app.models.order import Order
+    from app.models.reviews import Review
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -77,11 +80,42 @@ class User(BaseModel):
     )
 
     # RELACIONES
+    
+    # Como vendedor: publicaciones creadas por este usuario
     listings: Mapped[List["Listing"]] = relationship(
         "Listing",
         foreign_keys="Listing.seller_id",
         back_populates="seller",
         cascade="all, delete-orphan"
+    )
+    
+    # Como comprador: órdenes realizadas por este usuario
+    orders: Mapped[List["Order"]] = relationship(
+        "Order",
+        foreign_keys="Order.buyer_id",
+        back_populates="buyer",
+        cascade="all, delete-orphan"
+    )
+    
+    # Como comprador: reviews escritas por este usuario
+    reviews_as_buyer: Mapped[List["Review"]] = relationship(
+        "Review",
+        foreign_keys="Review.buyer_id",
+        back_populates="buyer"
+    )
+    
+    # Como vendedor: reviews recibidas en sus publicaciones
+    reviews_as_seller: Mapped[List["Review"]] = relationship(
+        "Review",
+        foreign_keys="Review.seller_id",
+        back_populates="seller"
+    )
+    
+    # Como admin: publicaciones aprobadas por este usuario (si es admin)
+    approved_listings: Mapped[List["Listing"]] = relationship(
+        "Listing",
+        foreign_keys="Listing.approved_by_admin_id",
+        back_populates="approved_by"
     )
 
     def __repr__(self) -> str:
