@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from app.models.user import User
     from app.models.order_item import OrderItem
     from app.models.reports import Report
-    from app.models.reports import Report
 
 
 class OrderStatusEnum(str, enum.Enum):
