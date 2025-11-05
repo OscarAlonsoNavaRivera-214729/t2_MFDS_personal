@@ -74,7 +74,7 @@ def upgrade() -> None:
     sa.Column('reported_order_id', sa.Integer(), nullable=True, comment='Llave foránea a orders (si se reporta una orden)'),
     sa.Column('reason', sa.String(length=255), nullable=False, comment='Razón o motivo del reporte'),
     sa.Column('details', sa.Text(), nullable=True, comment='Detalles adicionales opcionales sobre el reporte'),
-    sa.Column('status', sa.Enum('PENDING', 'UNDER_REVIEW', 'RESOLVED', 'DISMISSED', name='moderation_status_enum'), server_default='PENDING', nullable=False, comment='Estado de moderación del reporte'),
+    sa.Column('status', sa.Enum('PENDING', 'UNDER_REVIEW', 'RESOLVED', 'DISMISSED', name='moderation_status_enum'), server_default=sa.text("'PENDING'"), nullable=False, comment='Estado de moderación del reporte'),
     sa.Column('resolved_by_admin_id', sa.Integer(), nullable=True, comment='Llave foránea a users (admin que resolvió el reporte)'),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False, comment='Fecha y hora de creación del registro'),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False, comment='Fecha y hora de la ultima actualizacion del registro'),
