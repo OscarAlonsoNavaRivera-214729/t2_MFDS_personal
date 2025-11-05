@@ -2,12 +2,17 @@
 Modelo de base de datos para Reports.
 Implementa la tabla 'reports'
 """
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from datetime import datetime
-from sqlalchemy import func, String, Integer, ForeignKey, DateTime, Text, Enum
+from sqlalchemy import func, String, Integer, ForeignKey, DateTime, Text, Enum, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import BaseModel
 import enum
+
+if TYPE_CHECKING:
+    from app.models.user import User
+    from app.models.listing import Listing
+    from app.models.order import Order
 
 
 class ReportType(enum.Enum):
@@ -103,7 +108,7 @@ class Report(BaseModel):
     status: Mapped[ModerationStatus] = mapped_column(
         Enum(ModerationStatus, name="moderation_status_enum"),
         nullable=False,
-        server_default="pending",
+        server_default=text("'PENDING'"),
         comment="Estado de moderación del reporte"
     )
     

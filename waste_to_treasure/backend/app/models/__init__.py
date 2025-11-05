@@ -14,6 +14,10 @@ from app.models.order_item import OrderItem
 from app.models.reviews import Review
 from app.models.address import Address
 from app.models.cart import Cart, CartItem
+from app.models.reports import Report, ReportType, ModerationStatus
+
+# NOTE: Subscription comentado porque depende de 'plans' que aún no existe
+# from app.models.subscriptions import Subscription, SuscriptionStatus
 
 __all__ = [
 # Base classes
@@ -49,4 +53,9 @@ __all__ = [
     # Cart
     "Cart",
     "CartItem",
+
+    # Report
+    "Report",
+    "ReportType",
+    "ModerationStatus",
 ]

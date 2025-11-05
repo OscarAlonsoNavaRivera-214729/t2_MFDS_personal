@@ -32,6 +32,7 @@ from app.models import (
     Address,
     Cart,
     CartItem,
+    Report,
 )
 
 # this is the Alembic Config object, which provides
