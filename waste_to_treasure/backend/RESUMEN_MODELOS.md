@@ -1,181 +1,99 @@
-# Resumen de Implementación - Modelos User y Order
+# Plan de Implementación: Backend
 
-## ✅ Tareas Completadas
+Este documento sigue el progreso del desarrollo del backend, fase por fase.
 
-### 1. Modelo User (app/models/user.py)
-**Estado:** Completo y listo para producción
+---
 
-**Columnas implementadas:**
-- `user_id` (PK, autoincrement)
-- `cognito_sub` (UNIQUE, para integración con AWS Cognito)
-- `email` (UNIQUE, índice para búsquedas rápidas)
-- `full_name` (opcional)
-- `role` (ENUM: USER, ADMIN)
-- `status` (ENUM: PENDING, ACTIVE, BLOCKED)
-- `created_at` y `updated_at` (timestamps automáticos)
+## Fase 2: Implementación de Esquemas (Pydantic)
 
-**Relaciones implementadas:**
-- `listings`: Como vendedor (uno a muchos con Listing)
-- `orders`: Como comprador (uno a muchos con Order)
-- `reviews_as_buyer`: Reviews escritas como comprador
-- `reviews_as_seller`: Reviews recibidas como vendedor
-- `approved_listings`: Publicaciones aprobadas (si es admin)
+**Estado:** En progreso ⏳
 
-### 2. Modelo Order (app/models/order.py)
-**Estado:** Completo y listo para producción
+**Objetivo:** Definir los "contratos" de nuestra API usando esquemas Pydantic. Estos esquemas aseguran que los datos que entran y salen de la API tengan la estructura correcta, además de realizar validaciones automáticas.
 
-**Columnas implementadas:**
-- `order_id` (PK, autoincrement)
-- `buyer_id` (FK a users)
-- `subtotal` (Numeric 10,2)
-- `commission_amount` (Numeric 10,2 - calculado como 10%)
-- `total_amount` (Numeric 10,2)
-- `order_status` (ENUM: PAID, SHIPPED, DELIVERED, CANCELLED, REFUNDED)
-- `payment_charge_id` (UNIQUE, para Stripe/PayPal)
-- `payment_method` (stripe/paypal)
-- `created_at` y `updated_at` (timestamps automáticos)
+### Tarea Actual: Esquemas para `Category`
 
-**Relaciones implementadas:**
-- `buyer`: Relación con User (comprador)
-- `order_items`: Lista de items en la orden (composición)
+Vamos a empezar creando los esquemas para el modelo `Category`. Esto servirá como plantilla para que el resto del equipo pueda crear los esquemas de los otros modelos.
 
-**Métodos de utilidad:**
-- `calculate_totals()`: Calcula subtotal, comisión (10%) y total
-- `get_item_count()`: Cuenta total de items
-- `can_be_cancelled()`: Verifica si se puede cancelar
-- `can_be_reviewed()`: Verifica si se puede reseñar
-- `get_status_display()`: Retorna estado en español
+**Archivos a crear:**
+- `app/schemas/category.py`
+- `app/schemas/__init__.py` (para exportar los nuevos esquemas)
 
-### 3. Actualizaciones en OrderItem (app/models/order_item.py)
-**Relaciones agregadas:**
-- `order`: Relación con Order (cabecera)
-- `listing`: Relación con Listing (producto comprado)
-- `review`: Relación uno-a-uno con Review
+**Esquemas a definir en `category.py`:**
 
-### 4. Actualizaciones en Listing (app/models/listing.py)
-**Relaciones agregadas:**
-- `reviews`: Lista de reviews recibidas
+1.  **`CategoryBase`**:
+    -   Contiene los campos comunes que se usan tanto en creación como en actualización.
+    -   Campos: `name`, `description`, `type`, `parent_category_id`.
 
-**Nota importante:**
-- Se comentó temporalmente `location_address_id` porque el modelo Address no existe aún
-- Se agregó TODO para que se implemente en una migración futura
+2.  **`CategoryCreate`**:
+    -   Hereda de `CategoryBase`.
+    -   Se usa para validar los datos al **crear** una nueva categoría.
+    -   No tiene campos adicionales por ahora.
 
-### 5. Configuración de Alembic
-**Archivos creados:**
-- `alembic.ini`: Configuración principal de Alembic
-- `alembic/env.py`: Configuración del entorno y conexión con modelos
-- `alembic/script.py.mako`: Plantilla para migraciones
-- `alembic/README.md`: Documentación de uso
+3.  **`CategoryUpdate`**:
+    -   Hereda de `CategoryBase`.
+    -   Se usa para validar los datos al **actualizar** una categoría.
+    -   Todos sus campos deben ser opcionales.
 
-**Características clave:**
-- Conecta automáticamente con la DATABASE_URL del proyecto (desde .env)
-- Importa todos los modelos para detección automática
-- Configurado con `compare_type=True` y `compare_server_default=True`
+4.  **`CategoryInDB`**:
+    -   Hereda de `CategoryBase`.
+    -   Representa cómo se almacena la categoría en la base de datos.
+    -   Añade el campo `category_id`.
+    -   Configuración: `from_attributes = True` (antes `orm_mode`).
 
-### 6. Primera Migración Generada
-**Archivo:** `alembic/versions/f22e719cc9f5_initial_migration_create_all_tables.py`
+5.  **`Category`**:
+    -   Hereda de `CategoryInDB`.
+    -   Es el esquema que se usará para **devolver** datos al cliente.
+    -   Puede incluir campos adicionales o relaciones en el futuro (ej. `sub_categories`).
 
-**Tablas creadas (en orden de dependencias):**
-1. `categories` (sin dependencias)
-2. `users` (sin dependencias)
-3. `listings` (depende de users y categories)
-4. `orders` (depende de users)
-5. `listing_images` (depende de listings)
-6. `order_items` (depende de orders y listings)
-7. `reviews` (depende de order_items, users, listings)
+### Próximos Pasos
 
-**Características:**
-- Todos los ENUMs definidos correctamente
-- Todos los índices (simples y compuestos) creados
-- Foreign Keys con ondelete apropiado
-- Constraints (UNIQUE, CHECK) implementados
-- Funciones de downgrade completas para revertir
+1.  Implementar los 5 esquemas en `app/schemas/category.py`.
+2.  Exportarlos desde `app/schemas/__init__.py`.
+3.  Proceder con la creación de los endpoints CRUD para `Category`.
 
-## 🔧 Soluciones Técnicas Implementadas
+---
 
-### Problema 1: Imports Circulares
-**Solución:** Uso de `TYPE_CHECKING` para referencias forward
-```python
-from typing import TYPE_CHECKING
+## ✅ Fases Anteriores (Completadas)
 
-if TYPE_CHECKING:
-    from app.models.listing import Listing
-```
-Esto permite que SQLAlchemy resuelva las referencias en runtime sin causar errores de importación.
+<details>
+<summary>Fase 1: Modelos de Datos y Migraciones</summary>
 
-### Problema 2: Tabla addresses no existe
-**Solución:** Comentar temporalmente la FK en Listing
-```python
-# TODO: Descomentar cuando el modelo Address sea implementado
-# location_address_id: Mapped[Optional[int]] = ...
-```
+### 1. Modelos de Datos (SQLAlchemy)
+**Estado:** Completo
 
-### Problema 3: Referencias de strings en relationships
-**Estado:** Normal y esperado
-Los errores de Pylance sobre `"User"`, `"Order"`, etc. son normales. SQLAlchemy los resuelve en runtime y Alembic los maneja correctamente.
+**Modelos Implementados:**
+- ✅ `User`
+- ✅ `Address`
+- ✅ `Category`
+- ✅ `Listing`
+- ✅ `ListingImage`
+- ✅ `Cart` y `CartItem`
+- ✅ `Order` y `OrderItem`
+- ✅ `Review`
+- ⏳ `Report` (Pendiente)
 
-## 📋 Próximos Pasos
+**Características Clave:**
+- Todos los modelos heredan de `BaseModel` con `created_at` y `updated_at`.
+- Se usan Enums de Python para campos como `role`, `status`, etc.
+- Relaciones (`relationship`) definidas con `back_populates` para navegación bidireccional.
+- Uso de `TYPE_CHECKING` para evitar importaciones circulares.
+- Constraints de base de datos (`CheckConstraint`, `UniqueConstraint`) implementados.
 
-### Para aplicar la migración:
-```bash
-cd backend
-alembic upgrade head
-```
+### 2. Configuración de Alembic
+**Estado:** Completo
 
-### Para verificar el estado:
-```bash
-alembic current
-alembic history
-```
+**Características Clave:**
+- Conexión automática con la `DATABASE_URL` del proyecto.
+- Detección automática de modelos para `autogenerate`.
+- Configurado para comparar tipos y valores por defecto del servidor.
 
-### Para revertir (si es necesario):
-```bash
-alembic downgrade -1
-```
+### 3. Migraciones de Base de Datos
+**Estado:** Completo
 
-## 📊 Estado del Proyecto
+**Migraciones generadas:**
+1.  `f22e719cc9f5`: Creación inicial de todas las tablas excepto `Address`, `Cart`, `CartItem`.
+2.  `...` (nueva migración): Añade las tablas `addresses`, `carts` y `cart_items`, y actualiza las relaciones.
 
-### Modelos Completados (Oficiales)
-- ✅ Category (por ti)
-- ✅ User (ahora completo)
-- ✅ Order (ahora completo)
-- ✅ Listing (por compañero)
-- ✅ ListingImage (por compañero)
-- ✅ OrderItem (actualizado)
-- ✅ Review (por compañero)
+**Resultado:** El esquema de la base de datos está sincronizado con los modelos de SQLAlchemy definidos en `app/models`.
 
-### Modelos Pendientes
-- ⏳ Address (para ubicaciones físicas)
-- ⏳ Cart / CartItem (carrito de compras temporal)
-- ⏳ Report (sistema de reportes)
-
-## 🎯 Cumplimiento de Objetivos
-
-✅ **Objetivo principal alcanzado:** Crear modelos completos y oficiales de User y Order
-
-✅ **Migración generada exitosamente** con todas las tablas necesarias
-
-✅ **Dependencias manejadas correctamente** evitando conflictos circulares
-
-✅ **Equipo desbloqueado** - Pueden trabajar con referencias a User y Order sin problemas
-
-## 💡 Notas para el Equipo
-
-1. **Los errores de Pylance son normales:** Las referencias de strings en relationships son intencionales y funcionan correctamente.
-
-2. **No importar modelos directamente si hay riesgo circular:** Usar TYPE_CHECKING cuando sea necesario.
-
-3. **Todos los modelos están en `__init__.py`:** Para que Alembic los detecte automáticamente.
-
-4. **La comisión es 10%:** Implementada según GEMINI.md (RF-25).
-
-5. **Address pendiente:** Cuando se implemente, se puede crear una nueva migración que agregue la FK en Listing.
-
-## 🚀 Comando Final para Aplicar Migración
-
-```bash
-cd /home/oscarnr/Documents/t2_mfds_2025/waste_to_treasure/backend
-alembic upgrade head
-```
-
-¡El sistema está listo para recibir la primera migración! 🎉
+</details>
