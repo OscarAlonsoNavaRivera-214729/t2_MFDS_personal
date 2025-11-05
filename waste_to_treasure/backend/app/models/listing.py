@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from app.models.order_item import OrderItem
     from app.models.listing_image import ListingImage
     from app.models.reviews import Review
+    from app.models.address import Address
 
 
 class ListingStatusEnum(str, enum.Enum):
@@ -137,15 +138,13 @@ class Listing(BaseModel):
         default=1,
         comment="Cantidad disponible en inventario (stock)"
     )
-
-    # FOREIGN KEYS ADICIONALES
-    # TODO: Descomentar cuando el modelo Address sea implementado
-    # location_address_id: Mapped[Optional[int]] = mapped_column(
-    #     Integer,
-    #     ForeignKey("addresses.address_id", ondelete="SET NULL"),
-    #     nullable=True,
-    #     comment="ID de la dirección donde se encuentra el ítem físicamente"
-    # )
+ 
+    location_address_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        ForeignKey("addresses.address_id", ondelete="SET NULL"),
+        nullable=True,
+        comment="ID de la dirección donde se encuentra el ítem físicamente"
+    )
     
     origin_description: Mapped[Optional[str]] = mapped_column(
         Text,
@@ -179,11 +178,10 @@ class Listing(BaseModel):
         back_populates="listings"
     )
     # Relación con Address (ubicación del ítem)
-    # TODO: Implementar cuando exista el modelo Address
-    # location: Mapped[Optional["Address"]] = relationship(
-    #     "Address",
-    #     foreign_keys=[location_address_id]
-    # )
+    location: Mapped[Optional["Address"]] = relationship(
+        "Address",
+        foreign_keys=[location_address_id]
+    )
     approved_by: Mapped[Optional["User"]] = relationship(
         "User",
         foreign_keys=[approved_by_admin_id]

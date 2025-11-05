@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from app.models.listing import Listing
     from app.models.order import Order
     from app.models.reviews import Review
+    from app.models.address import Address
+    from app.models.cart import Cart
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -116,6 +118,22 @@ class User(BaseModel):
         "Listing",
         foreign_keys="Listing.approved_by_admin_id",
         back_populates="approved_by"
+    )
+
+    # Address Book: múltiples direcciones guardadas por el usuario
+    addresses: Mapped[List["Address"]] = relationship(
+        "Address",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        order_by="Address.is_default.desc()"  # Default primero
+    )
+    
+    # Carrito de compras: relación 1:1 con Cart
+    cart: Mapped[Optional["Cart"]] = relationship(
+        "Cart",
+        back_populates="owner",
+        uselist=False,  # Relación 1:1
+        cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

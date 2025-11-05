@@ -29,6 +29,9 @@ from app.models import (
     ListingImage,
     OrderItem,
     Review,
+    Address,
+    Cart,
+    CartItem,
 )
 
 # this is the Alembic Config object, which provides
