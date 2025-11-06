@@ -6,7 +6,7 @@ sobre las categorías en los marketplaces.
 """
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_serializer
 
 from app.models.category import ListingTypeEnum
 
@@ -82,7 +82,28 @@ class CategoryInDB(CategoryBase):
     created_at: datetime = Field(..., description="Fecha de creación")
     updated_at: datetime = Field(..., description="Última actualización")
     
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+        # Importante: solo serializar campos definidos explícitamente
+        # Esto evita que Pydantic intente acceder a 'children' en modelos SQLAlchemy
+        populate_by_name=True
+    )
+
+
+class CategoryRead(CategoryInDB):
+    """
+    Esquema de respuesta simple para Category (sin relaciones).
+    
+    Este esquema se usa para operaciones que NO necesitan cargar
+    las subcategorías (children), evitando el error MissingGreenlet.
+    
+    Usado en: POST, PATCH, GET individual, lista paginada
+    """
+    # Campo computado: ruta completa de la jerarquía  
+    full_path: Optional[str] = Field(
+        None,
+        description="Ruta completa en la jerarquía (ej: 'Electrónica > Móviles')"
+    )
 
 
 class Category(CategoryInDB):
@@ -92,7 +113,7 @@ class Category(CategoryInDB):
     Este es el esquema principal que se devuelve al cliente.
     Puede incluir campos computados o relaciones cargadas.
     
-    Usado en: Respuestas de GET, POST, PATCH
+    Usado en: Respuestas que incluyen la relación children (árbol, lista con hijos)
     """
     # Campo computado: ruta completa de la jerarquía
     full_path: Optional[str] = Field(
@@ -102,7 +123,7 @@ class Category(CategoryInDB):
     
     # Relaciones (opcionales según lazy loading)
     children: Optional[List["Category"]] = Field(
-        None,
+        default_factory=list,
         description="Lista de subcategorías hijas"
     )
 
@@ -111,7 +132,7 @@ class CategoryWithChildren(Category):
     """
     Esquema extendido que incluye subcategorías anidadas.
     
-    Usado en: GET /api/v1/categories/{category_id}?include_children=true
+    Usado en: GET /api/v1/categories/tree
     """
     children: List["Category"] = Field(
         default_factory=list,
@@ -124,8 +145,10 @@ class CategoryList(BaseModel):
     Esquema de respuesta paginada para listar categorías.
     
     Usado en: GET /api/v1/categories
+    
+    Usa CategoryRead (sin children) para evitar problemas de lazy loading.
     """
-    items: List[Category] = Field(..., description="Lista de categorías")
+    items: List[CategoryRead] = Field(..., description="Lista de categorías")
     total: int = Field(..., ge=0, description="Total de categorías encontradas")
     page: int = Field(..., ge=1, description="Página actual")
     page_size: int = Field(..., ge=1, le=100, description="Items por página")
@@ -149,6 +172,7 @@ class CategoryTree(BaseModel):
     )
 
 
-# Configurar referencias circulares para el modelo recursivo
+# Configurar referencias circulares para los modelos recursivos
+CategoryRead.model_rebuild()
 Category.model_rebuild()
 CategoryWithChildren.model_rebuild()
