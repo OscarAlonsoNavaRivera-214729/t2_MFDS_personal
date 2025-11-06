@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from app.models.reviews import Review
     from app.models.address import Address
     from app.models.reports import Report
+    from app.models.offer import Offer
 
 
 class ListingStatusEnum(str, enum.Enum):
@@ -204,6 +205,11 @@ class Listing(BaseModel):
     reports: Mapped[List["Report"]] = relationship(
         "Report",
         back_populates="reported_listing",
+        cascade="all, delete-orphan"
+    )
+    offers: Mapped[List["Offer"]] = relationship(
+        "Offer",
+        back_populates="listing",
         cascade="all, delete-orphan"
     )
 
