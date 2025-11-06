@@ -18,6 +18,8 @@ if TYPE_CHECKING:
     from app.models.address import Address
     from app.models.cart import Cart
     from app.models.reports import Report
+    from app.models.offer import Offer
+    from app.models.notification import Notification
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -155,6 +157,30 @@ class User(BaseModel):
         "Report",
         foreign_keys="Report.resolved_by_admin_id",
         back_populates="resolved_by_admin"
+    )
+
+    # Relación con ofertas enviadas (como comprador)
+    offers_sent: Mapped[List["Offer"]] = relationship(
+        "Offer",
+        foreign_keys="Offer.buyer_id",
+        back_populates="buyer",
+        cascade="all, delete-orphan"
+    )
+    
+    # Relación con ofertas recibidas (como vendedor)
+    offers_received: Mapped[List["Offer"]] = relationship(
+        "Offer",
+        foreign_keys="Offer.seller_id",
+        back_populates="seller",
+        cascade="all, delete-orphan"
+    )
+    
+    # Relación con Notifications
+    notifications: Mapped[List["Notification"]] = relationship(
+        "Notification",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        order_by="Notification.created_at.desc()"
     )
 
     def __repr__(self) -> str:
