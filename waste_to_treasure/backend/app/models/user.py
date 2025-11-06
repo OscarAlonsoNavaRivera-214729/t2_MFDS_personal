@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from app.models.reviews import Review
     from app.models.address import Address
     from app.models.cart import Cart
+    from app.models.reports import Report
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -119,21 +120,41 @@ class User(BaseModel):
         foreign_keys="Listing.approved_by_admin_id",
         back_populates="approved_by"
     )
-
-    # Address Book: múltiples direcciones guardadas por el usuario
-    addresses: Mapped[List["Address"]] = relationship(
-        "Address",
-        back_populates="user",
-        cascade="all, delete-orphan",
-        order_by="Address.is_default.desc()"  # Default primero
-    )
     
-    # Carrito de compras: relación 1:1 con Cart
+    # Carrito de compras (relación 1:1)
     cart: Mapped[Optional["Cart"]] = relationship(
         "Cart",
         back_populates="owner",
-        uselist=False,  # Relación 1:1
+        uselist=False,
         cascade="all, delete-orphan"
+    )
+    
+    # Direcciones del usuario (address book)
+    addresses: Mapped[List["Address"]] = relationship(
+        "Address",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    
+    # Reportes realizados por este usuario
+    reports_made: Mapped[List["Report"]] = relationship(
+        "Report",
+        foreign_keys="Report.reporter_user_id",
+        back_populates="reporter"
+    )
+    
+    # Reportes recibidos (cuando este usuario es reportado)
+    reports_received: Mapped[List["Report"]] = relationship(
+        "Report",
+        foreign_keys="Report.reported_user_id",
+        back_populates="reported_user"
+    )
+    
+    # Reportes resueltos (como admin)
+    reports_resolved: Mapped[List["Report"]] = relationship(
+        "Report",
+        foreign_keys="Report.resolved_by_admin_id",
+        back_populates="resolved_by_admin"
     )
 
     def __repr__(self) -> str:

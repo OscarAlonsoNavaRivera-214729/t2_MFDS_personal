@@ -70,3 +70,7 @@ uvloop==0.22.1
 watchfiles==1.1.1
 websockets==15.0.1
 yarl==1.22.0
+
+# Testing dependencies
+pytest==8.4.2
+pytest-cov==7.0.0

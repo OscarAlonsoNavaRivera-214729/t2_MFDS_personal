@@ -15,6 +15,7 @@ from app.models.base import BaseModel
 if TYPE_CHECKING:
     from app.models.user import User
     from app.models.order_item import OrderItem
+    from app.models.reports import Report
 
 
 class OrderStatusEnum(str, enum.Enum):
@@ -136,6 +137,12 @@ class Order(BaseModel):
         back_populates="order",
         cascade="all, delete-orphan",
         order_by="OrderItem.order_item_id"
+    )
+    
+    reports: Mapped[List["Report"]] = relationship(
+        "Report",
+        back_populates="reported_order",
+        cascade="all, delete-orphan"
     )
     
     # INDICES COMPUESTOS

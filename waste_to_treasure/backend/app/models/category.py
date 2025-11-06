@@ -83,7 +83,7 @@ class Category(BaseModel):
     # RELACIONES
     parent: Mapped[Optional["Category"]] = relationship(
         "Category",
-        remote_side=["category_id"],
+        remote_side=lambda: Category.category_id,
         back_populates="children",
         foreign_keys=[parent_category_id]
     )

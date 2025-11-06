@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from app.models.listing_image import ListingImage
     from app.models.reviews import Review
     from app.models.address import Address
+    from app.models.reports import Report
 
 
 class ListingStatusEnum(str, enum.Enum):
@@ -199,6 +200,11 @@ class Listing(BaseModel):
     reviews: Mapped[List["Review"]] = relationship(
         "Review",
         back_populates="listing"
+    )
+    reports: Mapped[List["Report"]] = relationship(
+        "Report",
+        back_populates="reported_listing",
+        cascade="all, delete-orphan"
     )
 
     # INDICES COMPUESTOS
