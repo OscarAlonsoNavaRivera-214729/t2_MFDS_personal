@@ -20,20 +20,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from app.core.config import get_settings
 from app.core.database import Base
 
-# Importar TODOS los modelos para que Alembic los detecte
-from app.models import (
-    Category,
-    User,
-    Order,
-    Listing,
-    ListingImage,
-    OrderItem,
-    Review,
-    Address,
-    Cart,
-    CartItem,
-    Report,
-)
+# Importar el paquete de modelos para asegurarnos de que todos los modelos
+# se registren en el metadata (esto ejecuta app/models/__init__.py)
+import app.models  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

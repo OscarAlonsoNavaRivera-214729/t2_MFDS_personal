@@ -17,6 +17,13 @@ from app.models.cart import Cart, CartItem
 from app.models.reports import Report, ReportType, ModerationStatus
 from app.models.offer import Offer, OfferStatusEnum
 from app.models.notification import Notification
+from app.models.admin_action_logs import AdminActionLog
+from app.models.plans import Plan, BillingCycle
+from app.models.subscriptions import Subscription, SuscriptionStatus
+from app.models.shipping_methods import ShippingMethod, ShippingTypeEnum
+from app.models.listing_shipping_options import ListingShippingOption
+from app.models.faq_items import FAQItem
+from app.models.legal_documents import LegalDocument
 
 # NOTE: Subscription comentado porque depende de 'plans' que aún no existe
 # from app.models.subscriptions import Subscription, SuscriptionStatus
@@ -67,4 +74,18 @@ __all__ = [
 
     # Notification
     "Notification",
+    # Admin action logs
+    "AdminActionLog",
+    # Plans / subscriptions
+    "Plan",
+    "BillingCycle",
+    "Subscription",
+    "SuscriptionStatus",
+    # Shipping & listing options
+    "ShippingMethod",
+    "ShippingTypeEnum",
+    "ListingShippingOption",
+    # FAQ and legal
+    "FAQItem",
+    "LegalDocument",
 ]
