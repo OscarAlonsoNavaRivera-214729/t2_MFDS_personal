@@ -94,7 +94,8 @@ poetry.lock
 
 # Documentation
 docs/_build/
-
+docs_archive/
+scripts/
 # Static / collected files
 staticfiles/
 
