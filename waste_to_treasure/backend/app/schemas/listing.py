@@ -147,7 +147,7 @@ class BulkImageUploadResponse(BaseModel):
 # SCHEMAS PARA FILTROS
 class ListingFilters(BaseModel):
     """Schema para filtros de búsqueda."""
-    
+
     listing_type: Optional[ListingTypeEnum] = None
     category_id: Optional[int] = None
     min_price: Optional[Decimal] = Field(None, ge=0)
@@ -155,11 +155,3 @@ class ListingFilters(BaseModel):
     search: Optional[str] = Field(None, min_length=3, max_length=100)
     status: Optional[ListingStatusEnum] = None
     seller_id: Optional[int] = None
-    
-    @field_validator('max_price')
-    def validate_price_range(cls, v, values):
-        """Valida que max_price sea mayor que min_price."""
-        if v is not None and 'min_price' in values and values['min_price'] is not None:
-            if v < values['min_price']:
-                raise ValueError('max_price debe ser mayor que min_price')
-        return v
