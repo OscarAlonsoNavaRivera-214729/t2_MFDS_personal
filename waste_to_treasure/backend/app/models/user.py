@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from app.models.notification import Notification
     from app.models.admin_action_logs import AdminActionLog
     from app.models.subscriptions import Subscription
+    from app.models.payment_customer import PaymentCustomer
 
 class UserRoleEnum(str, enum.Enum):
     """
@@ -201,6 +202,13 @@ class User(BaseModel):
     # Relación con Subscriptions
     subscriptions: Mapped[List["Subscription"]] = relationship(
         "Subscription",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+    
+    # Relación con PaymentCustomers (Stripe/PayPal customer IDs)
+    payment_customers: Mapped[List["PaymentCustomer"]] = relationship(
+        "PaymentCustomer",
         back_populates="user",
         cascade="all, delete-orphan"
     )
