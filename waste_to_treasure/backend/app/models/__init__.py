@@ -19,14 +19,17 @@ from app.models.offer import Offer, OfferStatusEnum
 from app.models.notification import Notification
 from app.models.admin_action_logs import AdminActionLog
 from app.models.plans import Plan, BillingCycle
-from app.models.subscriptions import Subscription, SuscriptionStatus
+from app.models.subscriptions import Subscription, SubscriptionStatus
 from app.models.shipping_methods import ShippingMethod, ShippingTypeEnum
 from app.models.listing_shipping_options import ListingShippingOption
 from app.models.faq_items import FAQItem
 from app.models.legal_documents import LegalDocument
+from app.models.payment_enums import PaymentGatewayEnum, PaymentStatusEnum, PayoutStatusEnum
+from app.models.payment_customer import PaymentCustomer
+from app.models.payment_transaction import PaymentTransaction
 
 # NOTE: Subscription comentado porque depende de 'plans' que aún no existe
-# from app.models.subscriptions import Subscription, SuscriptionStatus
+# from app.models.subscriptions import Subscription, SubscriptionStatus
 
 __all__ = [
 # Base classes
@@ -80,7 +83,7 @@ __all__ = [
     "Plan",
     "BillingCycle",
     "Subscription",
-    "SuscriptionStatus",
+    "SubscriptionStatus",
     # Shipping & listing options
     "ShippingMethod",
     "ShippingTypeEnum",
@@ -88,4 +91,10 @@ __all__ = [
     # FAQ and legal
     "FAQItem",
     "LegalDocument",
+    # Payment system
+    "PaymentGatewayEnum",
+    "PaymentStatusEnum",
+    "PayoutStatusEnum",
+    "PaymentCustomer",
+    "PaymentTransaction",
 ]

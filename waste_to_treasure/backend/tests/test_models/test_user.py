@@ -39,7 +39,7 @@ class TestUserModel:
         user_uuid = uuid4()
         user = User(
             user_id=user_uuid,
-            email="test@example.com",
+            email=f"test_{user_uuid.hex[:8]}@example.com",  # Email único
             full_name="Test User"
         )
         db.add(user)
@@ -47,7 +47,7 @@ class TestUserModel:
         db.refresh(user)
 
         assert user.user_id == user_uuid
-        assert user.email == "test@example.com"
+        assert user.email == f"test_{user_uuid.hex[:8]}@example.com"
         assert user.full_name == "Test User"
         assert user.role == UserRoleEnum.USER  # default value
         assert user.status == UserStatusEnum.PENDING  # default value
