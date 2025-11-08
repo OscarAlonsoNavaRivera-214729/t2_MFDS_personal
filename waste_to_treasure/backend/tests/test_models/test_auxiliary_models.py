@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.models.user import User, UserRoleEnum, UserStatusEnum
 from app.models.plans import Plan, BillingCycle
-from app.models.subscriptions import Subscription, SuscriptionStatus
+from app.models.subscriptions import Subscription, SubscriptionStatus
 from app.models.shipping_methods import ShippingMethod, ShippingTypeEnum
 from app.models.listing_shipping_options import ListingShippingOption
 from app.models.listing import Listing, ListingStatusEnum
@@ -92,7 +92,7 @@ class TestSubscriptionModel:
         subscription = Subscription(
             user_id=user.user_id,
             plan_id=plan.plan_id,
-            status=SuscriptionStatus.ACTIVE,
+            status=SubscriptionStatus.ACTIVE,
             next_billing_date=next_billing,
             gateway_sub_id="stripe_sub_123456"
         )
@@ -101,7 +101,7 @@ class TestSubscriptionModel:
         db.refresh(subscription)
 
         assert subscription.subscription_id is not None
-        assert subscription.status == SuscriptionStatus.ACTIVE
+        assert subscription.status == SubscriptionStatus.ACTIVE
         assert subscription.gateway_sub_id == "stripe_sub_123456"
 
     def test_subscription_unique_user_plan(self, db, user):
