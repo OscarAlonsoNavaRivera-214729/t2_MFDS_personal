@@ -46,7 +46,7 @@ export default function NavBar() {
         <div className="flex flex-1 items-center justify-end gap-4">
           <Link
             href="/login"
-            className="hidden rounded-lg border-2 border-primary-500 px-5 py-2.5 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
+            className="hidden rounded-lg border-2 border-primary-500 px-5 py-2 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
           >
             Iniciar sesión
           </Link>
