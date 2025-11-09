@@ -1,123 +1,140 @@
 import Link from 'next/link'
+import HomepageHeader from '@/components/layout/HomepageHeader'
+import Hero from '@/components/homepage/Hero'
+import HowItWorks from '@/components/homepage/HowItWorks'
+import FeaturedProducts from '@/components/homepage/FeaturedProducts'
+import FeaturedMaterials from '@/components/homepage/FeaturedMaterials'
+import Cta from '@/components/homepage/Cta'
+import Footer from '@/components/layout/Footer'
+
+// Datos de ejemplo para los carruseles, se modificara despues con elementos de nuestra bd
+const mockProducts = [
+  {
+    id: 1,
+    title: 'Lámpara colgante de cobre',
+    category: 'Hogar y decoración',
+    rating: 5.0,
+    reviews: 15,
+    price: 950.0,
+    imageUrl: 'https://okdiario.com/img/2020/10/09/5-secretos-de-los-gatos-que-seguramente-no-conoces.jpg',
+  },
+  {
+    id: 2,
+    title: 'Bolsa de lona reciclada',
+    category: 'Accesorios',
+    rating: 4.8,
+    reviews: 22,
+    price: 450.0,
+    imageUrl: 'https://mmedia.notitarde.com.ve/19502/agencia-26108.jpg',
+  },
+  {
+    id: 3,
+    title: 'Mesa de centro (Tarima)',
+    category: 'Muebles',
+    rating: 4.9,
+    reviews: 8,
+    price: 1200.0,
+    imageUrl: 'https://irisveterinaria.com.br/wp-content/uploads/2022/09/Como-e-a-visao-de-um-gato-Confira-5-curiosidades-aqui.jpg',
+  },
+  {
+    id: 4,
+    title: 'Cartera de cuero',
+    category: 'Accesorios',
+    rating: 5.0,
+    reviews: 30,
+    price: 600.0,
+    imageUrl: 'https://mininos.es/wp-content/uploads/2024/03/cuidados-para-gatos.jpg',
+  },
+  {
+    id: 5,
+    title: 'Juego de vasos (Vidrio)',
+    category: 'Hogar y decoración',
+    rating: 4.7,
+    reviews: 12,
+    price: 350.0,
+    imageUrl: 'https://michigato.com/wp-content/uploads/2022/06/razas-de-gatos-naranjas.jpg',
+  },
+  {
+    id: 5,
+    title: 'Juego de vasos (Vidrio)',
+    category: 'Hogar y decoración',
+    rating: 4.7,
+    reviews: 12,
+    price: 350.0,
+    imageUrl: 'https://irisveterinaria.com.br/wp-content/uploads/2022/09/Como-e-a-visao-de-um-gato-Confira-5-curiosidades-aqui.jpg',
+  },
+]
+
+const mockMaterials = [
+  {
+    id: 1,
+    title: 'Plástico triturado PET',
+    seller: 'Maquiladora X',
+    price: 15.0,
+    unit: 'KG',
+    available: 1,
+    unit_measure: 'Tonelada',
+    isResidue: true,
+    imageUrl: 'https://th.bing.com/th/id/R.7bb37e8a014b68ab774be2620c16ccae?rik=8FDwJuvB2NO0Vg&pid=ImgRaw&r=0',
+  },
+  {
+    id: 2,
+    title: 'Retazos de mezclilla',
+    seller: 'Fábrica de Ropa Y',
+    price: 5.0,
+    unit: 'KG',
+    available: 500,
+    unit_measure: 'KG',
+    isResidue: false,
+    imageUrl: 'https://www.xlsemanal.com/wp-content/uploads/sites/3/2018/10/plasticos-toxicos.jpg',
+  },
+  {
+    id: 3,
+    title: 'Tarimas de madera',
+    seller: 'Centro Logístico Z',
+    price: 50.0,
+    unit: 'pza',
+    available: 100,
+    unit_measure: 'unidades',
+    isResidue: false,
+    imageUrl: 'https://www.xlsemanal.com/wp-content/uploads/sites/3/2018/10/plasticos-toxicos.jpg',
+  },
+  {
+    id: 4,
+    title: 'Cobre (cableado)',
+    seller: 'Planta Eléctrica A',
+    price: 120.0,
+    unit: 'KG',
+    available: 200,
+    unit_measure: 'KG',
+    isResidue: true,
+    imageUrl: 'https://www.xlsemanal.com/wp-content/uploads/sites/3/2018/10/plasticos-toxicos.jpg',
+  },
+  {
+    id: 5,
+    title: 'Cartón compactado',
+    seller: 'Retail B',
+    price: 2.0,
+    unit: 'KG',
+    available: 2,
+    unit_measure: 'Toneladas',
+    isResidue: true,
+    imageUrl: 'https://www.xlsemanal.com/wp-content/uploads/sites/3/2018/10/plasticos-toxicos.jpg',
+  },
+]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header temporal */}
-      <header className="bg-primary-500 text-white py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold font-poppins">Waste to Treasure</h1>
-          <nav className="space-x-4">
-            <Link href="/materials" className="hover:underline">
-              Materiales
-            </Link>
-            <Link href="/products" className="hover:underline">
-              Productos
-            </Link>
-            <Link href="/login" className="hover:underline">
-              Iniciar Sesión
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className="flex-1">
-        <section className="bg-gradient-to-br from-primary-500 to-primary-600 text-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-5xl font-bold font-poppins mb-6">
-              Transformando Residuos en Recursos
-            </h1>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Conectamos empresas con residuos industriales y artesanos locales
-              para promover la economía circular en Ciudad Juárez
-            </p>
-            <div className="space-x-4">
-              <Link
-                href="/materials"
-                className="inline-block bg-white text-primary-500 font-medium py-3 px-8 rounded-lg hover:bg-neutral-100 transition"
-              >
-                Explorar Materiales
-              </Link>
-              <Link
-                href="/products"
-                className="inline-block bg-secondary-500 text-white font-medium py-3 px-8 rounded-lg hover:bg-secondary-600 transition"
-              >
-                Ver Productos
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold font-poppins text-center mb-12">
-            ¿Cómo Funciona?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6 border border-neutral-100 rounded-lg">
-              <div className="w-16 h-16 bg-primary-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="text-xl font-semibold font-roboto mb-2">
-                Publica Materiales
-              </h3>
-              <p className="text-neutral-900">
-                Empresas publican sus residuos industriales reutilizables
-              </p>
-            </div>
-
-            <div className="text-center p-6 border border-neutral-100 rounded-lg">
-              <div className="w-16 h-16 bg-primary-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-semibold font-roboto mb-2">
-                Artesanos Transforman
-              </h3>
-              <p className="text-neutral-900">
-                Artesanos adquieren materiales y crean productos únicos
-              </p>
-            </div>
-
-            <div className="text-center p-6 border border-neutral-100 rounded-lg">
-              <div className="w-16 h-16 bg-primary-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-semibold font-roboto mb-2">
-                Consumidores Compran
-              </h3>
-              <p className="text-neutral-900">
-                Usuarios finales adquieren productos sustentables
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="bg-secondary-500 text-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold font-poppins mb-4">
-              ¿Listo para empezar?
-            </h2>
-            <p className="text-lg mb-8">
-              Únete a nuestra comunidad de economía circular
-            </p>
-            <Link
-              href="/register"
-              className="inline-block bg-white text-secondary-500 font-medium py-3 px-8 rounded-lg hover:bg-neutral-100 transition"
-            >
-              Crear Cuenta Gratis
-            </Link>
-          </div>
-        </section>
+    <div className="flex min-h-screen flex-col bg-white">
+      <HomepageHeader />
+      <main>
+        <Hero />
+        <HowItWorks />
+        <FeaturedProducts products={mockProducts} />
+        <FeaturedMaterials materials={mockMaterials} />
+        <Cta />
       </main>
-
-      {/* Footer temporal */}
-      <footer className="bg-neutral-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>&copy; 2025 Waste to Treasure. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
