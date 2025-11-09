@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingCart } from 'lucide-react'
 
-export default function HomepageHeader() {
+export default function NavBar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@ export default function HomepageHeader() {
           <Link href="/" className="flex-shrink-0">
             {/* Asumiendo que tu logo está en public/images/logo.svg */}
             <Image
-              src="/images/logo.svg"
+              src="/images/LogoFondoBlanco.webp"
               alt="Waste to Treasure Logo"
               width={80}
               height={62}
@@ -46,9 +46,9 @@ export default function HomepageHeader() {
         <div className="flex flex-1 items-center justify-end gap-4">
           <Link
             href="/login"
-            className="hidden rounded-lg border-2 border-primary-500 px-5 py-2.5 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
+            className="hidden rounded-lg border-2 border-primary-500 px-5 py-2 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
           >
-            Iniciar Sesión
+            Iniciar sesión
           </Link>
           <Link
             href="/register"
