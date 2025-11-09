@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { ShoppingCart, LogOut, User } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 
-export default function HomepageHeader() {
+export default function NavBar() {
   const { isAuthenticated, user, logout } = useAuth();
 
   return (
@@ -16,7 +16,7 @@ export default function HomepageHeader() {
           <Link href="/" className="flex-shrink-0">
             {/* Asumiendo que tu logo está en public/images/logo.svg */}
             <Image
-              src="/images/logo.svg"
+              src="/images/LogoFondoBlanco.webp"
               alt="Waste to Treasure Logo"
               width={80}
               height={62}
@@ -70,9 +70,9 @@ export default function HomepageHeader() {
             <>
               <Link
                 href="/login"
-                className="hidden rounded-lg border-2 border-primary-500 px-5 py-2.5 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
+                className="hidden rounded-lg border-2 border-primary-500 px-5 py-2 text-base font-semibold text-primary-500 transition-colors hover:bg-primary-500/10 sm:block"
               >
-                Iniciar Sesión
+                Iniciar sesión
               </Link>
               <Link
                 href="/register"

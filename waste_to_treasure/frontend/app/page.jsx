@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import HomepageHeader from '@/components/layout/HomepageHeader'
+import NavBar from '@/components/layout/NavBar'
 import Hero from '@/components/homepage/Hero'
 import HowItWorks from '@/components/homepage/HowItWorks'
 import FeaturedProducts from '@/components/homepage/FeaturedProducts'
@@ -143,7 +143,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <HomepageHeader />
+      <NavBar />
       <main>
         {/* Show welcome message for authenticated users */}
         {isAuthenticated && user && (
