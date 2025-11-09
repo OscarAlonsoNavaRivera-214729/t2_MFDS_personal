@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link'
+import { useAuth } from '@/context/AuthContext'
 import Hero from '@/components/homepage/Hero'
 import HowItWorks from '@/components/homepage/HowItWorks'
 import FeaturedProducts from '@/components/homepage/FeaturedProducts'
@@ -124,10 +127,35 @@ const mockMaterials = [
 ]
 
 export default function HomePage() {
+  const { isAuthenticated, user, isLoading } = useAuth();
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#396539] mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <NavBar/>
+      <NavBar />
       <main>
+        {/* Show welcome message for authenticated users */}
+        {isAuthenticated && user && (
+          <div className="bg-[#396539] text-white py-3 px-4">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <p className="text-sm">
+                Bienvenido de nuevo, <span className="font-semibold">{user.name || user.email}</span>! 
+              </p>
+            </div>
+          </div>
+        )}
+        
         <Hero />
         <HowItWorks />
         <FeaturedProducts products={mockProducts} />
