@@ -4,6 +4,9 @@ from app.api.v1.endpoints import (
     addresses,
     users,
     notifications,
+    reviews,
+    faq,
+    legal,
     orders,
     plans,
     shipping,
@@ -37,6 +40,24 @@ router.include_router(
     notifications.router,
     prefix="/notifications",
     tags=["Notifications"]
+)
+
+router.include_router(
+    reviews.router,
+    prefix="/reviews",
+    tags=["Reviews"]
+)
+
+router.include_router(
+    faq.router,
+    prefix="/faq",
+    tags=["FAQ"]
+)
+
+router.include_router(
+    legal.router,
+    prefix="/legal",
+    tags=["Legal"]
 )
 
 router.include_router(
