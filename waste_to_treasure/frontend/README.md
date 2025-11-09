@@ -100,7 +100,7 @@ NEXT_PUBLIC_S3_BUCKET_URL=https://your-bucket.s3.amazonaws.com
 
 ## Convenciones de Código
 
-- Usar TypeScript para todo el código
+- Usar JavaScript para todo el código
 - Componentes funcionales con hooks
 - Nombrar archivos en kebab-case
 - Nombrar componentes en PascalCase
