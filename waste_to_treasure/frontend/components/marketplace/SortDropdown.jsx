@@ -5,6 +5,9 @@ import { ChevronDown } from 'lucide-react'
 
 /**
  * SortDropdown component for sorting materials
+ *
+ * Nota: El backend actualmente solo soporta ordenamiento por fecha (más recientes).
+ * Solo se muestra esa opción hasta que se implemente ordenamiento en el backend.
  */
 export default function SortDropdown({ onSortChange }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -12,11 +15,6 @@ export default function SortDropdown({ onSortChange }) {
 
   const options = [
     'Más recientes',
-    'Más antiguos',
-    'Precio: menor a mayor',
-    'Precio: mayor a menor',
-    'Nombre: A-Z',
-    'Nombre: Z-A',
   ]
 
   const handleSelect = (option) => {
