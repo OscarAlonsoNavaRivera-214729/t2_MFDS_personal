@@ -6,16 +6,22 @@ frontend:
       commands:
         # Forzar una versión de Node.js compatible
         - nvm use 20
-        - npm install
+        - npm ci --legacy-peer-deps
     build:
       commands:
         # Construir la app de Next.js
         - npm run build
   artifacts:
-    # Directorio de salida para Next.js SSR
-    baseDirectory: .next
+    # Para Next.js SSR, necesitamos todo el proyecto
+    baseDirectory: .
     files:
-      - '**/*'
+      - '.next/**/*'
+      - 'node_modules/**/*'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'next.config.*'
+      - 'public/**/*'
   cache:
     paths:
       - node_modules/**/*
+      - .next/cache/**/*
