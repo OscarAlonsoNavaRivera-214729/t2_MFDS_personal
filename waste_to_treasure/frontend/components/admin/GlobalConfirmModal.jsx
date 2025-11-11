@@ -1,17 +1,24 @@
 'use client'
 
-import { X, AlertTriangle } from 'lucide-react'
+// --- INICIO DE CORRECCIÓN: Importar icono de Check ---
+import { X, AlertTriangle, CheckCircle } from 'lucide-react'
+// --- FIN DE CORRECCIÓN ---
 import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function GlobalConfirmModal({
-  confirmText = 'Confirmar',
+  confirmText: defaultConfirmText = 'Confirmar',
   cancelText = 'Cancelar',
 }) {
-  // --- INICIO DE LA CORRECCIÓN ---
-  // 'danger' ahora viene del store, no de props estáticas
-  const { isOpen, title, message, onConfirm, onCancel, danger, close } =
-    useConfirmStore()
-  // --- FIN DE LA CORRECCIÓN ---
+  const {
+    isOpen,
+    title,
+    message,
+    onConfirm,
+    onCancel,
+    danger,
+    confirmText: storeConfirmText, // Texto de confirmación desde el store
+    close,
+  } = useConfirmStore()
 
   if (!isOpen) return null
 
@@ -25,9 +32,17 @@ export default function GlobalConfirmModal({
     close()
   }
 
+  // Determinar el texto del botón de confirmación
+  const CfmText = storeConfirmText || defaultConfirmText
+
+  // --- INICIO DE CORRECCIÓN: Clases y botón de confirmación ---
   const confirmClasses = danger
     ? 'bg-red-600 text-white hover:bg-red-700'
     : 'bg-primary-500 text-white hover:bg-primary-600' // Botón verde si no es 'danger'
+
+  const finalConfirmText = danger ? defaultConfirmText : CfmText
+  // --- FIN DE CORRECCIÓN ---
+
 
   return (
     <div
@@ -39,16 +54,23 @@ export default function GlobalConfirmModal({
         className="relative w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
       >
         <div className="flex items-start">
-          {danger && (
+          {/* --- INICIO DE CORRECCIÓN: Icono condicional --- */}
+          {danger ? (
             <div className="mr-4 flex-shrink-0 rounded-full bg-red-100 p-2">
               <AlertTriangle className="h-6 w-6 text-red-600" />
             </div>
+          ) : (
+            <div className="mr-4 flex-shrink-0 rounded-full bg-green-100 p-2">
+              <CheckCircle className="h-6 w-6 text-primary-500" />
+            </div>
           )}
+          {/* --- FIN DE CORRECCIÓN --- */}
+
           <div className="flex-1">
             <h2 className="font-poppins text-2xl font-semibold text-neutral-900">
               {title}
             </h2>
-            <p className="mt-2 font-inter text-base text-neutral-600">
+            <p className="mt-2 font-inter text-base text-neutral-600 whitespace-pre-line">
               {message}
             </p>
           </div>
@@ -74,8 +96,7 @@ export default function GlobalConfirmModal({
             onClick={handleConfirm}
             className={`rounded-lg px-4 py-2 font-inter text-sm font-semibold transition-colors ${confirmClasses}`}
           >
-            {/* El texto del botón cambia según si es 'danger' o no */}
-            {danger ? confirmText : 'Aceptar'}
+            {finalConfirmText}
           </button>
         </div>
       </div>

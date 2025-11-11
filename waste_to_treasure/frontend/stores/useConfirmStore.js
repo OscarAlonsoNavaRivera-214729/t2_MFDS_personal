@@ -8,6 +8,7 @@ export const useConfirmStore = create(set => ({
   title: '',
   message: '',
   danger: true, // Por defecto es un modal de peligro (rojo)
+  confirmText: null, // <-- AÑADIDO: Texto opcional para el botón de confirmar
   onConfirm: () => {},
   onCancel: () => {},
 
@@ -19,20 +20,19 @@ export const useConfirmStore = create(set => ({
    * @param {Object} [options] - Opciones adicionales
    * @param {Function} [options.onCancel] - (Opcional) La función a ejecutar si se cancela.
    * @param {boolean} [options.danger] - (Opcional) Si el botón de confirmación es rojo. (default: true)
+   * @param {string} [options.confirmText] - (Opcional) Texto para el botón de confirmación.
    */
   open: (title, message, onConfirm, options = {}) => {
-    // --- INICIO DE LA CORRECCIÓN ---
-    // Se desestructuran las opciones correctamente
-    const { onCancel = () => {}, danger = true } = options
+    const { onCancel = () => {}, danger = true, confirmText = null } = options
     set({
       isOpen: true,
       title,
       message,
       onConfirm,
       onCancel,
-      danger, // Guardar el estado de peligro
+      danger,
+      confirmText, // <-- AÑADIDO
     })
-    // --- FIN DE LA CORRECCIÓN ---
   },
 
   /**
@@ -45,6 +45,7 @@ export const useConfirmStore = create(set => ({
       message: '',
       onConfirm: () => {},
       onCancel: () => {},
-      danger: true, // Resetear al valor por defecto
+      danger: true,
+      confirmText: null, // <-- AÑADIDO
     }),
 }))

@@ -15,7 +15,7 @@ export default function VerticalStepper({ currentStep }) {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 w-full lg:w-32">
+    <div className="bg-white rounded-2xl shadow-lg p-6 w-full lg:w-32">
       {/* En móvil es horizontal (justify-between), en desktop es vertical (lg:flex-col) */}
       <nav className="flex lg:flex-col justify-between lg:justify-start lg:space-y-4">
         {steps.map((step, index) => (
@@ -31,10 +31,10 @@ export default function VerticalStepper({ currentStep }) {
                   font-poppins font-bold text-xl transition-colors
                   ${
                     step.id === currentStep
-                      ? 'bg-[#396530] text-white' // Paso actual
+                      ? 'bg-primary-500 text-white' // Paso actual
                       : step.id < currentStep
-                        ? 'bg-green-200 text-[#396530]' // Pasos completados
-                        : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400' // Pasos futuros
+                        ? 'bg-primary-500 text-white' // Pasos completados
+                        : 'bg-gray-300 text-primary-500 dark:text-gray-400' // Pasos futuros
                   }
                 `}
               >
@@ -45,7 +45,7 @@ export default function VerticalStepper({ currentStep }) {
                   text-sm md:text-base font-inter font-semibold transition-colors
                   ${
                     step.id <= currentStep
-                      ? 'text-[#396530] dark:text-green-300' // Actual o completado
+                      ? 'text-primary-600 text-primary-500' // Actual o completado
                       : 'text-gray-400 dark:text-gray-500' // Futuro
                   }
                 `}

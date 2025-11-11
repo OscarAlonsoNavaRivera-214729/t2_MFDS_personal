@@ -36,7 +36,7 @@ export default function CategorySelect({ value, onChange, disabled }) {
     <div className="relative w-full md:w-2/3 lg:w-1/2">
       <label
         htmlFor="category"
-        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        className="block text-sm font-medium text-dark mb-1"
       >
         Categoría
       </label>
@@ -47,13 +47,13 @@ export default function CategorySelect({ value, onChange, disabled }) {
         disabled={isLoading || disabled}
         className={`
           w-full p-3 border border-gray-400 dark:border-gray-600 rounded-xl appearance-none
-          bg-white dark:bg-gray-800 dark:text-white
+          bg-white text-dark
           focus:ring-2 focus:ring-[#396530] focus:border-transparent
           disabled:bg-gray-100 disabled:cursor-not-allowed
           ${
             value
-              ? 'text-black dark:text-white'
-              : 'text-gray-500'
+              ? 'text-black dark:text-black'
+              : 'text-black'
           }
         `}
       >

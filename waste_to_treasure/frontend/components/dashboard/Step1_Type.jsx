@@ -37,13 +37,13 @@ export default function Step1_Type({ onNext, listingData, updateListingData }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
       <div className="flex flex-col gap-6">
         {/* Títulos */}
-        <h2 className="text-[#396530] dark:text-green-300 text-2xl md:text-3xl font-poppins font-bold">
+        <h2 className="text-primary-500 text-2xl md:text-3xl font-poppins font-bold">
           Paso 1: ¿Qué vas a publicar?
         </h2>
-        <p className="text-gray-700 dark:text-gray-300 text-base font-inter">
+        <p className="text-neutral-900 text-base font-inter">
           Selecciona si estás vendiendo materia prima o un producto terminado.
         </p>
 
